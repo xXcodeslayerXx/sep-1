@@ -3,8 +3,12 @@
   <div class="row">
     <h1 class="display-1">DyslexiaEase</h1>
   </div>
-  <button class="start" onclick="startTimer()">Start</button>
-  <button class="stop" onclick="stopTimer()">Stop</button>
+  <button class="start" onclick="showStartTime()">Start</button>
+  <button class="stop" onclick="showEndTime()">Stop</button>
+  <div class="time-log">
+    <div>Start Time: <span id="start-time">--:--:--</span></div>
+    <div>End Time: <span id="end-time">--:--:--</span></div>
+  </div>
   <div class="row"></div>
 </div>
 
