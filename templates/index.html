@@ -1,11 +1,176 @@
-{% extends 'layout.html' %}
-{% block content %}
+{% extends 'layout.html' %} {% block content %}
+<!-- LEFT SIDE: Subjects -->
+<h1 class="display-1">DyslexiaEase</h1>
 <div class="container">
-    <div class="row">
-        <h1 class="display-1">Hello world!</h1>
-    </div>
-    <div class="row">
+  <div class="row">
+    <h2>Subjects and Topics</h2>
+  </div>
+  <form action="/study.html" method="GET">
+    <details>
+      <summary>English</summary>
+      <div class="button-grid">
+        <button class="topic-button">Reading</button>
+        <button class="topic-button">Writing</button>
+        <button class="topic-button">Speaking</button>
+        <button class="topic-button">Grammar</button>
+      </div>
+    </details>
 
-    </div>
+    <details>
+      <summary>Math</summary>
+      <div class="button-grid">
+        <button class="topic-button">Measurement</button>
+        <button class="topic-button">Geometry</button>
+        <button class="topic-button">Addition</button>
+        <button class="topic-button">Subtraction</button>
+        <button class="topic-button">Multiplication</button>
+        <button class="topic-button">Division</button>
+        <button class="topic-button">Probability</button>
+      </div>
+    </details>
+
+    <details>
+      <summary>History</summary>
+      <div class="button-grid">
+        <button class="topic-button">Ancient</button>
+        <button class="topic-button">Local</button>
+      </div>
+    </details>
+
+    <details>
+      <summary>Science</summary>
+      <div class="button-grid">
+        <button class="topic-button">Plants</button>
+        <button class="topic-button">Animals</button>
+        <button class="topic-button">Electricity</button>
+        <button class="topic-button">Astronomy</button>
+      </div>
+    </details>
+
+    <details>
+      <summary>Art</summary>
+      <div class="button-grid">
+        <button class="topic-button">Lines</button>
+        <button class="topic-button">Colours</button>
+        <button class="topic-button">Shapes</button>
+      </div>
+    </details>
+
+    <details>
+      <summary>Geography</summary>
+      <div class="button-grid">
+        <button class="topic-button">Maps</button>
+        <button class="topic-button">Earth</button>
+        <button class="topic-button">Weather</button>
+        <button class="topic-button">Environment</button>
+      </div>
+    </details>
+  </form>
+  <div class="row"></div>
 </div>
+
+<!-- RIGHT SIDE: Timer -->
+<div id="content"></div>
+
+<script>
+  // console.log("Start script");
+  // const data = [
+  //   { Subject: "English", Topic: "Reading" },
+  //   { Subject: "English", Topic: "Writing" },
+  //   { Subject: "English", Topic: "Speaking" },
+  //   { Subject: "English", Topic: "Grammar" },
+  //   { Subject: "Math", Topic: "Measurement" },
+  //   { Subject: "Math", Topic: "Geometry" },
+  //   { Subject: "Math", Topic: "Addition" },
+  //   { Subject: "Math", Topic: "Subtraction" },
+  //   { Subject: "Math", Topic: "Multiplication" },
+  //   { Subject: "Math", Topic: "Division" },
+  //   { Subject: "Math", Topic: "Probability" },
+  //   { Subject: "History", Topic: "Ancient" },
+  //   { Subject: "History", Topic: "Local" },
+  //   { Subject: "Science", Topic: "Plants" },
+  //   { Subject: "Science", Topic: "Animals" },
+  //   { Subject: "Science", Topic: "Electricity" },
+  //   { Subject: "Science", Topic: "Astronomy" },
+  //   { Subject: "Art", Topic: "Lines" },
+  //   { Subject: "Art", Topic: "Colours" },
+  //   { Subject: "Art", Topic: "Shapes" },
+  //   { Subject: "Geography", Topic: "Maps" },
+  //   { Subject: "Geography", Topic: "Earth" },
+  //   { Subject: "Geography", Topic: "Weather" },
+  //   { Subject: "Geography", Topic: "Environment" },
+  // ];
+
+  // const content = document.getElementById("content");
+
+  // const grouped = {};
+  // data.forEach(({ Subject, Topic }) => {
+  //   if (!grouped[Subject]) grouped[Subject] = [];
+  //   grouped[Subject].push(Topic);
+  // });
+
+  // const timers = {};
+  // let activeTopic = null;
+
+  // function formatTime(seconds) {
+  //   const m = String(Math.floor(seconds / 60)).padStart(2, "0");
+  //   const s = String(seconds % 60).padStart(2, "0");
+  //   return `${m}:${s}`;
+  // }
+
+  // function startTimer(topicId) {
+  //   if (activeTopic && activeTopic !== topicId) {
+  //     stopTimer(activeTopic);
+  //   }
+
+  //   if (!timers[topicId].interval) {
+  //     timers[topicId].interval = setInterval(() => {
+  //       timers[topicId].seconds++;
+  //       document.getElementById(`timer-${topicId}`).textContent = formatTime(
+  //         timers[topicId].seconds
+  //       );
+  //     }, 1000);
+  //     activeTopic = topicId;
+  //   }
+  // }
+
+  // function stopTimer(topicId) {
+  //   clearInterval(timers[topicId].interval);
+  //   timers[topicId].interval = null;
+  //   if (activeTopic === topicId) activeTopic = null;
+  // }
+
+  // Object.entries(grouped).forEach(([subject, topics]) => {
+  //   const section = document.createElement("details");
+  //   section.className = "subject-section";
+  //   const summary = document.createElement("summary");
+  //   summary.textContent = subject;
+  //   section.appendChild(summary);
+
+  //   const grid = document.createElement("div");
+  //   grid.className = "topic-grid";
+
+  //   topics.forEach((topic) => {
+  //     const topicId = topic.replace(/\s+/g, "-").toLowerCase();
+  //     timers[topicId] = { seconds: 0, interval: null };
+
+  //     const card = document.createElement("div");
+  //     card.className = "topic-card";
+  //     card.innerHTML = `
+  //       <div class="topic-title">${topic}</div>
+  //       <div class="timer-display" id="timer-${topicId}">00:00</div>
+  //       <div class="controls">
+  //         <button class="start-btn" onclick="startTimer('${topicId}')">Start</button>
+  //         <button class="stop-btn" onclick="stopTimer('${topicId}')">Stop</button>
+  //       </div>
+  //     `;
+
+  //     grid.appendChild(card);
+  //   });
+
+  //   section.appendChild(grid);
+  //   content.appendChild(section);
+  // });
+</script>
+
 {% endblock %}

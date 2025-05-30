@@ -1,7 +1,30 @@
 -- database: ./database.db
+CREATE TABlE study (ID int, Subject, Topic, TimeSpent Time, TimeAndDate datetime, OvrTime Time);
 
--- CREATE TABLE id7-tusers(id INTEGER PRIMARY KEY autoincrement,username TEXT NOT NULL UNIQUE, password TEXT NOT NULL);
+INSERT INTO study (ID, Subject, Topic, TimeSpent, TimeAndDate, OvrTime) VALUES
+(1, 'English', 'Reading', '', '', ''),
+(2, 'English', 'Writing', '', '', ''),
+(3, 'English', 'Speaking', '', '', ''),
+(4, 'English', 'Grammar', '', '', ''),
+(5, 'Math', 'Measurement', '', '', ''),
+(6, 'Math', 'Geomotry', '', '', ''),
+(7, 'Math', 'Addition', '', '', ''),
+(8, 'Math', 'Subtraction', '', '', ''),
+(9, 'Math', 'Multiplication', '', '', ''),
+(10, 'Math', 'Division', '', '', ''),
+(11, 'Math', 'Probability', '', '', ''),
+(12, 'History', 'Ancient', '', '', ''),
+(13, 'History', 'Local', '', '', ''),
+(14, 'Science', 'Plants', '', '', ''),
+(15, 'Science', 'Animals', '', '', ''),
+(16, 'Science', 'Electricity', '', '', ''),
+(17, 'Science', 'Astronomy', '', '', ''),
+(18, 'Art', 'Lines', '', '', ''),
+(19, 'Art', 'Colours', '', '', ''),
+(20, 'Art', 'Shapes', '', '', ''),
+(21, 'Geography', 'Maps', '', '', ''),
+(22, 'Geography', 'Earth', '', '', ''),
+(23, 'Geography', 'Weather', '', '', ''),
+(24, 'Geography', 'Environment', '', '', '');
 
--- INSERT INTO id7-tusers(username,password) VALUES ("","");
 
--- SELECT * FROM extension;

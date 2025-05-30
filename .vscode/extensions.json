@@ -16,6 +16,8 @@
     "bierner.markdown-preview-github-styles",
     "mechatroner.rainbow-csv",
     "ms-python.pylint",
-    "ms-python.vscode-python-envs"
+    "ms-python.vscode-python-envs",
+    "feiskyer.chatgpt-copilot",
+    "visualstudioexptteam.vscodeintellicode"
   ]
 }

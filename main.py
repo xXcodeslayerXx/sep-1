@@ -28,11 +28,11 @@ csrf = CSRFProtect(app)
 
 
 # Redirect index.html to domain root for consistent UX
-@app.route("/index", methods=["GET"])
+@app.route("/index", methods=["GET","POST"])
 @app.route("/index.htm", methods=["GET"])
 @app.route("/index.asp", methods=["GET"])
 @app.route("/index.php", methods=["GET"])
-@app.route("/index.html", methods=["GET"])
+@app.route("/index.html", methods=["GET","POST"])
 def root():
     return redirect("/", 302)
 
@@ -59,6 +59,8 @@ def root():
     }
 )
 def index():
+    if request.method == "POST":
+        print("POST")
     return render_template("/index.html")
 
 
@@ -85,6 +87,13 @@ def csp_report():
     app.logger.critical(request.data.decode())
     return "done"
 
+@app.route("/study.html", methods=["POST", "GET"])
+def study():
+    if request.method == "POST":
+        print("POST")
+    return render_template("/study.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
+
