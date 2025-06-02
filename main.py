@@ -7,8 +7,9 @@ import requests
 from flask_wtf import CSRFProtect
 from flask_csp.csp import csp_header
 import logging
-
+import datetime
 import userManagement as dbHandler
+from datetime import datetime, timedelta
 
 # Code snippet for logging a message
 # app.logger.critical("message")
@@ -87,11 +88,65 @@ def csp_report():
     app.logger.critical(request.data.decode())
     return "done"
 
-@app.route("/study.html", methods=["POST", "GET"])
+
+saved_times = []
+
+# def format_time(ms):
+#     return str(datetime.timedelta(milliseconds=ms)).split('.')[0]
+
+@app.route('/study.html',methods=['GET','POST'])
 def study():
-    if request.method == "POST":
-        print("POST")
-    return render_template("/study.html")
+    if request.method =='POST':
+        action= request.form.get('action') # Getting which button was clicked
+        print(action)
+        if action == "start": 
+            now = datetime.now()
+            current_time = now.strftime("%H:%M:%S")
+            starttime= str(current_time)
+            return render_template('study.html',starttime=starttime)
+        elif action == "stop":
+            starttime = request.form["start_time"]
+            print(starttime)
+            now = datetime.now()
+            current_time = now.strftime("%H:%M:%S")
+            endtime = str(current_time)
+
+            timespent = calculatetimespent(starttime, endtime)
+            dbHandler.savelog('','',timespent,now)
+            return render_template('study.html',starttime=starttime, end_time=endtime)
+        else: #reset was clicked
+            return render_template('study.html',starttime = '00:00:00')
+    else:
+        return render_template('study.html',starttime = '00:00:00')
+    
+def calculatetimespent(starttime, endtime):
+    start = datetime.strptime(starttime, "%H:%M:%S")
+    end = datetime.strptime(endtime, "%H:%M:%S")
+    time_difference = end - start
+    seconds = time_difference.total_seconds()
+    return (seconds)
+
+
+@app.route('/save', methods=['POST'])
+def save_time():
+    data = request.get_json()
+    ms = data['time']
+    formatted = format_time(ms)
+    saved_times.append(ms)
+    print(f"Time saved: {formatted} ({ms} ms)")  # You can store this in a DB
+    return jsonify({"status": "success", "formatted": formatted})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+# @app.route("/study.html", methods=["POST", "GET"])
+# def study():
+#     if request.method == "POST":
+#         value = "Here I am"
+#         return render_template("/study.html",message=value )
+#     return render_template("/study.html")
 
 
 if __name__ == "__main__":

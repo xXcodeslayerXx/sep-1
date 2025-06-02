@@ -2,14 +2,16 @@
 <div class="container">
   <div class="row">
     <h1 class="display-1">DyslexiaEase</h1>
+    <div class="time" id="start_time">{{starttime}}</div>
+    <div class="time" id="end_time">{{end_time}}</div>
+    <form action="/study.html" method="POST" class="box">
+      <button type="submit" name="action" value="start">Start</button>
+      <button type ="submit" name="action" value="stop">Stop</button>
+      <button>Reset</button>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <input type="hidden" name="start_time" value="{{ starttime }}" />
+    </form>
+    </div>
+    {% endblock %}
   </div>
-  <button class="start" onclick="showStartTime()">Start</button>
-  <button class="stop" onclick="showEndTime()">Stop</button>
-  <div class="time-log">
-    <div>Start Time: <span id="start-time">--:--:--</span></div>
-    <div>End Time: <span id="end-time">--:--:--</span></div>
-  </div>
-  <div class="row"></div>
 </div>
-
-{% endblock %}
