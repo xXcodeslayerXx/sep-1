@@ -1,0 +1,93 @@
+{% extends 'layout.html' %} {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="display-4">Dashboard</h1>
+      <h2>Hello, {{ username }} 👋</h2>
+    </div>
+  </div>
+
+  <!-- User's Study Summary -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h3>Your Study Summary</h3>
+      {% if user_study_summary %}
+      <div class="row">
+        {% for subject_data in user_study_summary %}
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">{{ subject_data.subject }}</h5>
+              <div class="study-stats">
+                <p class="mb-1">
+                  <strong>Sessions:</strong> {{ subject_data.session_count }}
+                </p>
+                <p class="mb-1">
+                  <strong>Total Time:</strong> {{
+                  subject_data.total_time_minutes }} minutes
+                </p>
+                <p class="mb-1">
+                  <strong>Average:</strong> {{ subject_data.avg_time_minutes }}
+                  minutes/session
+                </p>
+                <p class="mb-0">
+                  <strong>Last Studied:</strong> {{ subject_data.last_study_date
+                  }}
+                </p>
+              </div>
+            </div>
+            <div class="card-footer">
+              <a
+                href="/study-timer?subject={{ subject_data.subject }}"
+                class="btn btn-primary btn-sm"
+                >Study {{ subject_data.subject }}</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="alert alert-info">
+        <h5>No study sessions yet!</h5>
+        <p>
+          Start your learning journey by clicking the Study Mode button below.
+        </p>
+        <a href="/subjects" class="btn btn-primary">Start Studying</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <h3>Quick Actions</h3>
+      <div class="btn-group" role="group">
+        <a href="/subjects" class="btn btn-primary">Study Mode</a>
+        <a href="/" class="btn btn-secondary">Home</a>
+        <a href="/form.html" class="btn btn-outline-secondary"
+          >Create Account</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .study-stats p {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+  }
+
+  .card-title {
+    color: #007bff;
+    font-weight: 600;
+  }
+</style>
+{% endblock %}

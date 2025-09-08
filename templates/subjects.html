@@ -1,0 +1,90 @@
+{% extends 'layout.html' %} {% block content %}
+<div class="container">
+  <div class="row">
+    <h1 class="display-1">Study Mode</h1>
+    <h2 class="mb-4">Select a Subject to Study</h2>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <h5 class="card-title">English</h5>
+            <p class="card-text">Reading, Writing, Speaking, Grammar</p>
+            <a href="/study-timer?subject=English" class="btn btn-primary"
+              >Study English</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <h5 class="card-title">Math</h5>
+            <p class="card-text">
+              Measurement, Geometry, Arithmetic, Probability
+            </p>
+            <a href="/study-timer?subject=Math" class="btn btn-primary"
+              >Study Math</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <h5 class="card-title">History</h5>
+            <p class="card-text">Ancient History, Local History</p>
+            <a href="/study-timer?subject=History" class="btn btn-primary"
+              >Study History</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <h5 class="card-title">Science</h5>
+            <p class="card-text">Plants, Animals, Electricity, Astronomy</p>
+            <a href="/study-timer?subject=Science" class="btn btn-primary"
+              >Study Science</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <h5 class="card-title">Art</h5>
+            <p class="card-text">Lines, Colors, Shapes</p>
+            <a href="/study-timer?subject=Art" class="btn btn-primary"
+              >Study Art</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <h5 class="card-title">Geography</h5>
+            <p class="card-text">Maps, Earth, Weather, Environment</p>
+            <a href="/study-timer?subject=Geography" class="btn btn-primary"
+              >Study Geography</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-12 text-center">
+        <a href="/" class="btn btn-secondary">Back to Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

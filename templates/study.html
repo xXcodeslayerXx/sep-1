@@ -1,17 +1,114 @@
 {% extends 'layout.html' %} {% block content %}
 <div class="container">
   <div class="row">
-    <h1 class="display-1">DyslexiaEase</h1>
-    <div class="time" id="start_time">{{starttime}}</div>
-    <div class="time" id="end_time">{{end_time}}</div>
-    <form action="/study.html" method="POST" class="box">
-      <button type="submit" name="action" value="start">Start</button>
-      <button type ="submit" name="action" value="stop">Stop</button>
-      <button>Reset</button>
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-      <input type="hidden" name="start_time" value="{{ starttime }}" />
-    </form>
+    <div class="col-12 text-center">
+      <h1 class="display-1">DyslexiaEase</h1>
+      <h2 class="mb-4">Studying: {{ subject }}</h2>
+
+      <div class="study-timer-container">
+        <div class="timer-display">
+          <div class="time-display" id="timer">00:00:00</div>
+          <div class="subject-info mb-3">
+            <span class="badge bg-primary fs-5">{{ subject }}</span>
+          </div>
+        </div>
+
+        <div class="timer-controls mb-4">
+          <button id="startBtn" class="btn btn-success btn-lg me-2">
+            Start
+          </button>
+          <button id="pauseBtn" class="btn btn-warning btn-lg me-2" disabled>
+            Pause
+          </button>
+          <button id="stopBtn" class="btn btn-danger btn-lg me-2" disabled>
+            Stop
+          </button>
+          <button id="resetBtn" class="btn btn-secondary btn-lg">Reset</button>
+        </div>
+
+        <div class="session-info">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Session Summary</h5>
+                  <p class="card-text">
+                    <strong>Start Time:</strong>
+                    <span id="startTime">--:--:--</span><br />
+                    <strong>End Time:</strong> <span id="endTime">--:--:--</span
+                    ><br />
+                    <strong>Total Time:</strong>
+                    <span id="totalTime">00:00:00</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Quick Actions</h5>
+                  <button
+                    id="saveSessionBtn"
+                    class="btn btn-primary mb-2"
+                    disabled
+                  >
+                    Save Session</button
+                  ><br />
+                  <a href="/study-mode" class="btn btn-outline-secondary"
+                    >Choose Another Subject</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    {% endblock %}
   </div>
 </div>
+
+<script src="/static/js/studyTimer.js"></script>
+
+<style>
+  .study-timer-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .timer-display {
+    margin-bottom: 2rem;
+  }
+
+  .time-display {
+    font-size: 4rem;
+    font-weight: bold;
+    font-family: "Courier New", monospace;
+    color: #007bff;
+    margin-bottom: 1rem;
+  }
+
+  .timer-controls {
+    margin-bottom: 2rem;
+  }
+
+  .session-info {
+    margin-top: 2rem;
+  }
+
+  .card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+  }
+
+  .card-title {
+    color: #495057;
+    font-weight: 600;
+  }
+
+  .badge {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+  }
+</style>
+{% endblock %}

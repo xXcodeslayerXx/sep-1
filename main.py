@@ -4,12 +4,13 @@ from flask import render_template
 from flask import request
 from flask import jsonify
 import requests
-from flask_wtf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect
 from flask_csp.csp import csp_header
 import logging
 import datetime
 import userManagement as dbHandler
 from datetime import datetime, timedelta
+from flask import session
 
 # Code snippet for logging a message
 # app.logger.critical("message")
@@ -37,7 +38,6 @@ csrf = CSRFProtect(app)
 def root():
     return redirect("/", 302)
 
-
 @app.route("/", methods=["POST", "GET"])
 @csp_header(
     {
@@ -60,26 +60,72 @@ def root():
     }
 )
 def index():
+    error = None
     if request.method == "POST":
         print("POST")
-    return render_template("/index.html")
-
+        return render_template("index.html", error=error)
+    # Always return a response for GET
+    return render_template("index.html", error=error)
 
 @app.route("/privacy.html", methods=["GET"])
 def privacy():
     return render_template("/privacy.html")
+
+@app.route("/login", methods=["GET", "POST"])
+
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        user = dbHandler.get_user(username, password)
+        if user:
+            session["user_id"] = user[0]  # save user id
+            session["username"] = user[1]
+            return render_template("index.html")
+        else:
+            return "Invalid login!"
+    print('test')
+    return render_template("login.html")
+
+## Removed automatic login() call to avoid using request outside context
+
+@app.route("/dashboard")
+def dashboard():
+    if "user_id" not in session:
+        return redirect("/login")
+
+ # Get study summary for the current user
+    user_id = session["user_id"]
+    user_study_summary = dbHandler.get_user_study_summary(user_id)
+    
+    # Get all users study summary for admin view (optional)
+    all_users_summary = dbHandler.get_all_users_study_summary()
+    
+    return render_template("dashboard.html", 
+                        username=session["username"], 
+                        user_study_summary=user_study_summary,
+                        all_users_summary=all_users_summary)
+
+@app.route("/subjects", methods=["GET"])
+def subjects():
+    if "user_id" not in session:
+        return redirect("/login")
+    return render_template("subjects.html")
 
 
 # example CSRF protected form
 @app.route("/form.html", methods=["POST", "GET"])
 def form():
     if request.method == "POST":
-        email = request.form["email"]
-        text = request.form["text"]
-        return render_template("/form.html")
-    else:
-        return render_template("/form.html")
-
+        username = request.form["Username"]
+        password = request.form["Password"]
+        try:
+            dbHandler.create_user(username, password)
+            return render_template("/form.html")
+        except Exception:
+            return "Username already exists!"
+    return render_template("/form.html")
+        
 
 # Endpoint for logging CSP violations
 @app.route("/csp_report", methods=["POST"])
@@ -89,66 +135,39 @@ def csp_report():
     return "done"
 
 
-saved_times = []
-
+# Removed stray decorator with no function
 # def format_time(ms):
 #     return str(datetime.timedelta(milliseconds=ms)).split('.')[0]
 
-@app.route('/study.html',methods=['GET','POST'])
+@app.route('/study.html', methods=['GET'])
 def study():
-    if request.method =='POST':
-        action= request.form.get('action') # Getting which button was clicked
-        print(action)
-        if action == "start": 
-            now = datetime.now()
-            current_time = now.strftime("%H:%M:%S")
-            starttime= str(current_time)
-            return render_template('study.html',starttime=starttime)
-        elif action == "stop":
-            starttime = request.form["start_time"]
-            print(starttime)
-            now = datetime.now()
-            current_time = now.strftime("%H:%M:%S")
-            endtime = str(current_time)
+    subject = request.args.get('subject', 'General')
+    return render_template('study.html', subject=subject)
 
-            timespent = calculatetimespent(starttime, endtime)
-            dbHandler.savelog('','',timespent,now)
-            return render_template('study.html',starttime=starttime, end_time=endtime)
-        else: #reset was clicked
-            return render_template('study.html',starttime = '00:00:00')
-    else:
-        return render_template('study.html',starttime = '00:00:00')
-    
-def calculatetimespent(starttime, endtime):
-    start = datetime.strptime(starttime, "%H:%M:%S")
-    end = datetime.strptime(endtime, "%H:%M:%S")
-    time_difference = end - start
-    seconds = time_difference.total_seconds()
-    return (seconds)
+@app.route('/study-timer', methods=['GET'])
+def study_timer():
+    subject = request.args.get('subject', 'General')
+    return render_template('study.html', subject=subject)
 
+@app.route('/save-study-session', methods=['POST'])
+@csrf.exempt
+def save_study_session():
+    try:
+        data = request.get_json()
+        subject = data.get('subject', 'General')
+        time_spent_seconds = data.get('timeSpentSeconds', 0)
+        start_time = data.get('startTime', '')
+        end_time = data.get('endTime', '')
+        
+        # For now, use a default user_id (you can get this from session later)
+        user_id = session.get('user_id', 1)  # Default to user 1 if not logged in
+        
+        dbHandler.save_study_session(user_id, subject, time_spent_seconds, start_time, end_time)
+        
+        return jsonify({"status": "success", "message": "Study session saved successfully"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
-@app.route('/save', methods=['POST'])
-def save_time():
-    data = request.get_json()
-    ms = data['time']
-    formatted = format_time(ms)
-    saved_times.append(ms)
-    print(f"Time saved: {formatted} ({ms} ms)")  # You can store this in a DB
-    return jsonify({"status": "success", "formatted": formatted})
 
 if __name__ == '__main__':
-    app.run(debug=True)
-
-
-
-# @app.route("/study.html", methods=["POST", "GET"])
-# def study():
-#     if request.method == "POST":
-#         value = "Here I am"
-#         return render_template("/study.html",message=value )
-#     return render_template("/study.html")
-
-
-if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
-

@@ -1,0 +1,4 @@
+-- database: /workspaces/sep-1/databaseFiles/database.db
+
+SELECT * FROM study
+ORDER BY `user_id` ASC;
